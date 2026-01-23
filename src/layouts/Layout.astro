@@ -1,9 +1,22 @@
 ---
+import EventCard from '../components/EventCard.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import '../styles/global.css';
 
 const { titre } = Astro.props;
+const events = [
+    {
+        title: "Conférence sur les astres",
+        date: "Lundi 12 Juillet",
+        favori: true,
+    },
+    {
+        title: "Atelier sur les étoiles",
+        date: "Mardi 13 Juillet",
+        favori: false,
+    },
+];
 ---
 
 <html lang="fr">
@@ -21,3 +34,13 @@ const { titre } = Astro.props;
         <Footer/>
     </body>
 </html>
+
+<Layout title="Agenda">
+    <h1>Event Agenda</h1>
+    <ul>
+        {
+            events.map((ev) => (
+                <EventCard event={ev} />
+            ))
+        }
+    </ul>

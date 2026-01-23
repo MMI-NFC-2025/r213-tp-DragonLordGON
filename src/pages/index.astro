@@ -1,8 +1,32 @@
 ---
 import Layout from '../layouts/Layout.astro'
+console.log('Chargement de la page d\'accueil');
+const name = 'Astro User';
+
+const maliste = ['Item 1', 'Item 2', 'Item 3'];
 ---
 
 <Layout titre="Accueil">
     <h1>Accueil</h1>
 	<h2>Bienvenue sur mon site !</h2>
+    <div>hello <span id="nameLocation" data-name={name}></span></div>
+    <button id="AddName">Add name</button>
+    <ul>
+        {maliste.map(x => (
+            <li>{x}</li>
+        ))}
+        <!-- {maliste.map(function(item)){
+            return<li>{item}</li>
+        }} (verison ancienne avant flèches)-->
 </Layout>
+
+<script>
+    //@ts-nocheck
+    console.log('Bienvenue sur la page d\'accueil !'); 
+    const buttonAdd = document.getElementById('AddName');
+    const nameLocation = document.getElementById('nameLocation');
+    const name = nameLocation?.dataset.name;
+    buttonAdd.addEventListener('click', () => {
+        nameLocation.textContent = name || 'No name found';
+    });
+</script>
