@@ -1,0 +1,8 @@
+---
+const { nomMaison, favori, prix } = Astro.props;
+---
+
+<div  class="offre" data-favori={favori.toString()}>
+    <a>{nomMaison}</a>
+    <p>{prix} €</p>
+</div>
