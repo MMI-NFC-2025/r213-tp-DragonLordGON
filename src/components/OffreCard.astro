@@ -1,8 +1,14 @@
 ---
 const { nomMaison, favori, prix } = Astro.props;
+import PbImage from './PbImage.astro';
+
+const offre  = Astro.props.offre;
+console.log(offre);
+
 ---
 
-<div  class="offre" data-favori={favori.toString()}>
-    <a>{nomMaison}</a>
-    <p>{prix} €</p>
+<div  class="offre">
+    <a>{offre.ID_Maison}</a>
+    <p>{offre.prix}€</p>
+    <PbImage record={offre} recordImage={offre.Image} />
 </div>

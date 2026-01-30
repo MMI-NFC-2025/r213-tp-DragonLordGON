@@ -1,42 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro'
 import OffreCard from '../components/OffreCard.astro';
+import { getOffres } from '../js/backend.mjs';
+const offres = await getOffres();
+console.log(offres);
 
-const offres = [
-    {
-        "adresse": "2821 Lake Sevilla, Palm Harbor, TX",
-        "favori": true,
-        "id": "64l3n8nar836i5j",
-        "nbChambres": 4,
-        "nbSdb": 2,
-        "nomMaison": "Beverly Springfield",
-        "prix": 2700,
-        "surface": 45,
-        "imgUrl": "image1.png"
-    },
-    {
-        "adresse": "2699 Green Valley, Highland Lake",
-        "favori": true,
-        "id": "lo831zeg10hpm9y",
-        "nbChambres": 4,
-        "nbSdb": 2,
-        "nomMaison": "Palm Harbor",
-        "prix": 2095,
-        "surface": 42,
-        "imgUrl": "image2.png"
-    },
-    {
-        "adresse": "909 Woodland St, Michigan, IN",
-        "favori": false,
-        "id": "s1zuhj19x8eb242",
-        "nbChambres": 4,
-        "nbSdb": 3,
-        "nomMaison": "Faulkner Ave",
-        "prix": 4550,
-        "surface": 80,
-        "imgUrl": "image3.png"
-    }
-]
 ---
 
     <script>
@@ -47,14 +15,15 @@ const offres = [
             showOnlyFavorites = !showOnlyFavorites;
             const offres = document.querySelectorAll('.offre');
             
-            offres.forEach(offre => {
-                const isFavori = offre.dataset.favori === 'true';
+            offres.forEach((offre) => {
+                const htmlElement = offre as HTMLElement;
+                const isFavori = htmlElement.dataset.favori === 'true';
                 
                 if (showOnlyFavorites) {
-                    offre.style.display = isFavori ? 'block' : 'none';
+                    htmlElement.style.display = isFavori ? 'block' : 'none';
                     button.textContent = 'Afficher tout';
                 } else {
-                    offre.style.display = 'block';
+                    htmlElement.style.display = 'block';
                     button.textContent = 'Afficher les favoris';
                 }
             });
@@ -75,7 +44,7 @@ const offres = [
     <ul>
         {
             offres.map(offre => (
-                <OffreCard {...offre}></OffreCard>
+                <OffreCard offre={offre}></OffreCard>
             ))
         }
     </ul>
