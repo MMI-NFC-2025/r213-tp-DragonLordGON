@@ -1,0 +1,18 @@
+---
+import { bysurface } from '../../../js/backend.mjs';
+import Layout  from '../../../layouts/Layout.astro';
+
+const { surface } = Astro.params;
+const offre = (await bysurface(surface))[0];
+---
+
+{offre && (
+<Layout titre={offre.nomMaison}>
+    <h2>{offre.nomMaison}</h2>
+    <ul>
+        <li>{offre.adresse}</li>
+        <li>{offre.prix}€</li>
+        <li>{offre.surface}m²</li>
+    </ul>
+</Layout>
+)}

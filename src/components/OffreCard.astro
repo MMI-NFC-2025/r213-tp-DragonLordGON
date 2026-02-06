@@ -8,7 +8,10 @@ console.log(offre);
 ---
 
 <div  class="offre">
+    
     <a>{offre.ID_Maison}</a>
     <p>{offre.prix}€</p>
     <PbImage record={offre} recordImage={offre.Image} />
+    <a href={`/offres/${offre.id}`}>Voir plus</a>
+
 </div>
