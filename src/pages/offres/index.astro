@@ -1,10 +1,30 @@
 ---
 import Layout from '../../layouts/Layout.astro'
 import OffreCard from '../../components/OffreCard.astro';
-import { getOffres } from '../../js/backend.mjs';
+import { getOffres, filterByPrix } from '../../js/backend.mjs';
 const offres = await getOffres();
 console.log(offres);
 
+let Offres = [];
+let message = '';
+
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const minPrix = parseInt(data.get("minPrix") as string);
+    const maxPrix = parseInt(data.get("maxPrix") as string);
+
+    if (minPrix >= 0 && maxPrix > minPrix) {
+        Offres = await filterByPrix(minPrix, maxPrix);
+        message = Offres.length === 0 
+            ? `Pas d'offres entre ${minPrix}€ et ${maxPrix}€` 
+            : `Liste des offres entre ${minPrix}€ et ${maxPrix}€`;
+    } else {
+        message = "Veuillez entrer des valeurs valides pour le prix.";
+        Offres = await getOffres();
+    }
+} else {
+    Offres = await getOffres();
+}
 ---
 
     <script>
@@ -33,6 +53,24 @@ console.log(offres);
 <Layout titre="Offres">
 
     <h1>offres</h1>
+
+    <form action="/offres" method="POST" class="mb-8 flex gap-4 items-end bg-gray-50 p-4 rounded-lg">
+            <div>
+                <label class="block text-sm">Prix Min</label>
+                <input type="number" name="minPrix" placeholder="0" class="border p-2 rounded" />
+            </div>
+            <div>
+                <label class="block text-sm">Prix Max</label>
+                <input type="number" name="maxPrix" placeholder="1000000" class="border p-2 rounded" />
+            </div>
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Filtrer par prix
+            </button>
+            <a href="/offres" class="text-sm text-gray-500 underline mb-2">Réinitialiser</a>
+    </form>
+
+    {message && <p class="mb-4 font-semibold">{message}</p>}
+
     <a href="offres/surface/80">surface</a>
     <br>
         <button id="favori-button" class="bg-slate-600 rounded-lg text-white p-2">Afficher les favoris</button>
@@ -44,7 +82,7 @@ console.log(offres);
     <OffreCard nomMaison={offres[2].nomMaison} favori={offres[2].favori}></OffreCard> -->
     <ul>
         {
-            offres.map(offre => (
+            Offres.map(offre => (
                 <OffreCard offre={offre}></OffreCard>
             ))
         }
