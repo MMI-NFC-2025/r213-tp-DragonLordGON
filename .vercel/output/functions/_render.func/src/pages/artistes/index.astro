@@ -1,0 +1,26 @@
+---
+import PocketBase from 'pocketbase' ;
+const pb = new PocketBase('http://127.0.0.1:8090') ;
+
+export async function getArtistes(){
+    let artistes = await pb.collection("artists").getFullList({
+        expand:"events"
+    });
+    return artistes;
+}
+
+const artists = await allArtists();
+
+//backend.mjs
+export async function allArtists() {
+    try {
+        let artists = await pb.collection("artists").getFullList();
+        return artists
+    } catch (error) {
+        console.error("error allArtists: ", error);
+        return null;
+    }
+}
+
+---
+

@@ -10,6 +10,62 @@
 				"cache-control": "public, max-age=31536000, immutable"
 			},
 			"continue": true
+		},
+		{
+			"src": "^/_server-islands/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/_image/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/agenda/add/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/agenda/modify/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/agenda/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/agents/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/agents/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/artistes/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/artistes/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/offres/add/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/offres/surface/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/offres/([^/]+?)/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/offres/?$",
+			"dest": "_render"
+		},
+		{
+			"src": "^/$",
+			"dest": "_render"
 		}
 	]
 }
