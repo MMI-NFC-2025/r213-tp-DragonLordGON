@@ -1,32 +1,27 @@
 ---
 import Layout from '../layouts/Layout.astro'
-console.log('Chargement de la page d\'accueil');
-const name = 'Astro User';
+import { allMaisonsFavori } from '../js/backend.mjs';
+import OffreCard from '../components/OffreCard.astro';
 
-const maliste = ['Item 1', 'Item 2', 'Item 3'];
+const favoris = await allMaisonsFavori();
 ---
 
 <Layout titre="Accueil">
     <h1>Accueil</h1>
 	<h2>Bienvenue sur mon site !</h2>
-    <div>hello <span id="nameLocation" data-name={name}></span></div>
-    <button id="AddName">Add name</button>
-    <ul>
-        {maliste.map(x => (
-            <li>{x}</li>
-        ))}
-        <!-- {maliste.map(function(item)){
-            return<li>{item}</li>
-        }} (verison ancienne avant flèches)-->
+    
+    <section>
+        <h3 class="text-2xl font-bold my-4">Mes maisons favorites</h3>
+        <div class="flex overflow-x-auto gap-4 p-4 scrollbar-hide">
+            {favoris.length > 0 ? (
+                favoris.map((offre) => (
+                    <div class="flex-none w-80">
+                        <OffreCard offre={offre} />
+                    </div>
+                ))
+            ) : (
+                <p>Aucune maison favorite pour le moment.</p>
+            )}
+        </div>
+    </section>
 </Layout>
-
-<script>
-    //@ts-nocheck
-    console.log('Bienvenue sur la page d\'accueil !'); 
-    const buttonAdd = document.getElementById('AddName');
-    const nameLocation = document.getElementById('nameLocation');
-    const name = nameLocation?.dataset.name;
-    buttonAdd.addEventListener('click', () => {
-        nameLocation.textContent = name || 'No name found';
-    });
-</script>
