@@ -2,19 +2,25 @@
 import PbImage from './PbImage.astro';
 
 const { offre } = Astro.props;
-console.log(offre);
-
 ---
 
-<div  class="offre relative border p-4 rounded-lg shadow-md">
-    
+<div class="offre relative border p-4 rounded-lg shadow-md">
     <h2 class="text-xl font-bold">{offre.nomMaison}</h2>
     <p>{offre.prix}€</p>
     <PbImage record={offre} recordImage={offre.Image} />
     <a href={`/offres/${offre.id}`} class="block mt-2 text-blue-500 hover:underline">Voir plus</a>
 
-    <button class="favoriteButton absolute bottom-0 left-0 p-2 text-white rounded-br-lg" data-offre={JSON.stringify(offre)}>
-        <img id="favorite-icon" src={offre.favori ? "/favorite_filled.png" : "/favorite.png"} alt="Favorite Icon" class="w-6 h-6" />
+    <button
+        type="button"
+        class="favoriteButton absolute bottom-0 left-0 p-2 text-white rounded-br-lg"
+        data-id={offre.id}
+        data-favori={String(!!offre.favori)}
+    >
+        <img
+            class="favorite-icon w-6 h-6"
+            src={offre.favori ? "/favorite_filled.png" : "/favorite.png"}
+            alt="Favorite Icon"
+        />
     </button>
 </div>
 
@@ -23,19 +29,24 @@ console.log(offre);
     import { setFavori } from "../js/backend.mjs";
     const favoriteButtons = document.querySelectorAll(".favoriteButton");
 
-    favoriteButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const offreData = JSON.parse(button.dataset.offre || '{}');
-            const newFavori = !offreData.favori;
+    favoriteButtons.forEach((button) => {
+        button.addEventListener("click", async () => {
+            const id = button.dataset.id;
+            const currentFavori = button.dataset.favori === "true";
+            const newFavori = !currentFavori;
 
-            setFavori(offreData);
+            try {
+                await setFavori({ id, favori: newFavori });
 
-            const favIcon = button.querySelector('#favorite-icon');
-            if (favIcon) {
-                favIcon.src = newFavori ? "/favorite_filled.png" : "/favorite.png";
+                const favIcon = button.querySelector(".favorite-icon");
+                if (favIcon) {
+                    favIcon.src = newFavori ? "/favorite_filled.png" : "/favorite.png";
+                }
+
+                button.dataset.favori = String(newFavori);
+            } catch (e) {
+                console.error("Failed to update favorite:", e);
             }
-            offreData.favori = newFavori;
-            button.dataset.offre = JSON.stringify(offreData);
         });
     });
 </script>

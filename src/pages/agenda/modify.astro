@@ -1,17 +1,27 @@
 ---
-import PocketBase from 'pocketbase' ;
-const pb = new PocketBase('http://127.0.0.1:8090') ;
+import PocketBase from 'pocketbase';
+const pb = new PocketBase('http://127.0.0.1:8090');
 
+const id = Astro.url.searchParams.get('id');
+if (!id) {
+    console.error('Missing event id in query string');
+    return Astro.redirect('/agenda');
+}
 
-const { id } = Astro.params;
 let event = await getOneEvent(id);
 if (!event) {
     console.error(`Event with id ${id} not found`);
     return Astro.redirect("/agenda");
 }
 
-//backend.mjs
-export async function getOneEvent(id) {
+function formatDate(dateValue: string | Date) {
+    if (!dateValue) return '';
+    const d = new Date(dateValue);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toISOString().split('T')[0]; 
+}
+
+async function getOneEvent(id: string) {
     try {
         const event = await pb.collection("events").getOne(id);
         event.img = pb.files.getURL(event, event.imgUrl);
@@ -21,5 +31,4 @@ export async function getOneEvent(id) {
         return null;
     }
 }
-
 ---
